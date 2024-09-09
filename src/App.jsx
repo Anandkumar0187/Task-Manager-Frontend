@@ -5,46 +5,64 @@ import TaskForm from "./components/create_tasks/TaskForm";
 import Dashboard from "./components/dashboard/Dashboard";
 import TaskList from "./components/tasks_list/TaskList";
 import TaskDetails from "./components/taskDetails/TaskDetails";
-import axios from "axios";
 import { Box } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cookies from "js-cookie";
-
-const apiUrl = import.meta.env.VITE_API_URL;
+import ProtectedRoute from "./routes/protectedRoutes";
 
 function App() {
-  const [taskData, setTaskData] = useState({});
-  const token = Cookies.get('authToken')
-  // const handleSelectId = async (taskId) => {
-  //   const res = await axios.get(`${apiUrl}/api/v1/task/${taskId}`,{
-  //     headers: {
-  //       'Authorization': `Bearer ${token}`
-  //     }
-  //   });
-  //   setTaskData(res.data);
-  // };
-
   return (
     <Box>
       <ToastContainer />
       <BrowserRouter>
         <Routes>
-          <Route path="/register" element={<Register/>}/>
-          <Route path="/" element={<Login/>}/>
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<Login />} />
+          
+          {/* Protecting the routes */}
           <Route
             path="/home"
-            element={<TaskList />}
+            element={
+              <ProtectedRoute>
+                <TaskList />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/create" element={<TaskForm />} />
-          <Route path="/edit/:id" element={<TaskForm />} />
+          <Route
+            path="/create"
+            element={
+              <ProtectedRoute>
+                <TaskForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit/:id"
+            element={
+              <ProtectedRoute>
+                <TaskForm />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/task-details"
-            element={<TaskDetails />}
+            element={
+              <ProtectedRoute>
+                <TaskDetails />
+              </ProtectedRoute>
+            }
           />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </Box>
